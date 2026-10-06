@@ -2,6 +2,14 @@
 
 [Project](../../README.md) | [Deutsch](../de/testing.md)
 
+## CI follow-up: 6 October 2026
+User-supplied GitHub logs now confirm successful .NET build/publish and 51 passing
+xUnit tests on **each** of Windows/Linux, plus 20 real ASP.NET API checks. The
+native browser suite failed in an incorrectly scoped CSP assertion. This update
+corrects the test; it does not disable CSP. [Diagnosis, regression controls and
+remaining acceptance scope](ci-csp-fix.md). Original preparation results below
+remain a historical record, not a statement that the supplied CI never ran.
+
 ## Delivery status: 5 October 2026
 This is source release `0.1.0-preview.1`. No .NET SDK, Docker or SQL Server was available in the source-delivery environment. Network/DNS prevented SDK acquisition. Therefore **no C# compilation, xUnit execution, ASP.NET runtime, real SQL collection, lab benchmark, Windows execution or container launch is claimed for this delivery**. Authored tests are not passed tests.
 

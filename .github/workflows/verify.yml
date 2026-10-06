@@ -59,6 +59,8 @@ jobs:
         with:
           python-version: '3.13'
       - run: pip install -r tests/requirements.txt && python -m playwright install --with-deps chromium
+      - name: Test CSP probe with positive and negative browser controls
+        run: python tests/csp_test.py
       - name: Publish and start actual application
         shell: bash
         run: |
@@ -90,5 +92,6 @@ jobs:
           path: |
             artifacts/server.log
             artifacts/api-smoke.json
+            artifacts/csp-controls/
             artifacts/ui/
           if-no-files-found: warn

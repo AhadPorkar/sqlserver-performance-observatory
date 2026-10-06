@@ -8,6 +8,11 @@ Ein unabhängiger, lesender Diagnosearbeitsplatz mit **C# 14, ASP.NET Core 10 un
 
 > **Technische Vorschau `0.1.0-preview.1`.** In der Lieferumgebung waren weder .NET-SDK noch SQL Server/Docker verfügbar. C#-Build und SQL-Laufzeit sind daher nicht bestätigt. Frontend- und Hilfstests wurden mit klar gekennzeichneten synthetischen Daten ausgeführt. CI und echte SQL-Abnahmetests sind vorbereitet. [Details](docs/de/testing.md).
 
+> **CI-Nachtrag (6. Oktober 2026):** Eingereichte Logs bestätigen .NET-Builds und
+> jeweils 51 bestandene xUnit-Tests auf Windows/Linux sowie 20 echte API-Prüfungen.
+> Der CSP-/Inspector-Fehler lag im Browsertest und wurde korrigiert.
+> [Diagnose und verbleibende Prüfgrenzen](docs/de/ci-csp-fix.md).
+
 ![Deutsche Oberflaeche mit sichtbarer Kennzeichnung synthetischer Daten](docs/assets/overview-de.png)
 
 *Echte Oberfläche, synthetische Daten. Keine Produktionsdaten oder gemessenen Beschleunigungswerte.*

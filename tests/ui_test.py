@@ -4,16 +4,21 @@
 import argparse,json,os,pathlib,sys,urllib.request,urllib.error,http.cookiejar,re
 from playwright.sync_api import sync_playwright,expect
 from fixture_server import make_server
+from csp_probe import require_csp_header, probe_string_compilation, require_string_compilation_blocked
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--base-url',default='http://localhost:5080');parser.add_argument('--fixture',action='store_true');parser.add_argument('--route-transport',action='store_true');parser.add_argument('--output',default='artifacts/ui');parser.add_argument('--dom-bridge',action='store_true');args=parser.parse_args()
     if args.dom_bridge and not args.fixture:parser.error('--dom-bridge is restricted to synthetic fixtures')
     out=ROOT/args.output;out.mkdir(parents=True,exist_ok=True)
+    for name in ('report.json','csp-probe.json','failure.png','trace.zip'):
+        (out/name).unlink(missing_ok=True)
     server=make_server() if args.fixture else None
     base=('http://127.0.0.1:'+str(server.server_port)) if server else args.base_url.rstrip('/')
     key='ui-fixture-key-not-valid-in-the-real-application' if server else os.environ['SPO_ACCESS_KEY']
-    checks=[]
-    def check(label):checks.append(label)
+    checks=[];failure=None;csp_evidence=None
+    def check(label):
+        checks.append(label)
+        print('PASS '+label,flush=True)
     with sync_playwright() as p:
         browser=p.chromium.launch(headless=True,args=['--no-sandbox'],executable_path=os.environ.get('SPO_BROWSER_EXECUTABLE'));ctx=browser.new_context(viewport={'width':1512,'height':1000},locale='de-DE')
         ctx.tracing.start(screenshots=True,snapshots=True,sources=True)
@@ -52,14 +57,16 @@ def main():
         else:
             load_dom=lambda:page.goto(base,wait_until='networkidle')
         try:
-            load_dom()
+            navigation=load_dom()
             expect(page.locator('html')).to_have_attribute('lang','en');check('English default despite German browser')
             expect(page.locator('#loginView')).to_be_visible();check('Authentication screen')
             page.locator('#accessKey').fill('wrong-key');page.locator('#loginForm button[type=submit]').click();expect(page.locator('#loginError')).not_to_have_text('');check('Wrong key rejected')
             page.locator('#accessKey').fill(key);page.locator('#loginForm button[type=submit]').click();expect(page.locator('#workspace')).to_be_visible();expect(page.locator('.metric')).to_have_count(4);check('Login and overview')
             expect(page.locator('#accessKey')).to_have_value('');check('Password cleared after authentication')
             if not args.dom_bridge:
-                assert 'unsafe-eval' not in (page.request.get(base+'/').headers.get('content-security-policy',''));check('CSP does not allow unsafe-eval')
+                assert navigation is not None and navigation.ok,'Main document navigation failed'
+                document_csp=require_csp_header(navigation.headers.get('content-security-policy'))
+                check('Actual document CSP header is present and does not allow unsafe-eval')
             for language in ['en','de','fa']:
                 page.locator('#workspace .language-picker').select_option(language)
                 expect(page.locator('html')).to_have_attribute('lang',language);expect(page.locator('html')).to_have_attribute('dir','rtl' if language=='fa' else 'ltr');check('Language and direction: '+language)
@@ -81,18 +88,30 @@ def main():
                 assert page.locator('body').bounding_box()['width']<=391;check('Mobile page width '+language)
                 page.set_viewport_size({'width':1512,'height':1000})
             if not args.dom_bridge:
-                page.reload(wait_until='networkidle');expect(page.locator('html')).to_have_attribute('lang','fa');expect(page.locator('#workspace')).to_be_visible();check('Language and session survive reload')
-            # An actual eval request should remain blocked. Do not enable bypass_csp.
+                navigation=page.reload(wait_until='networkidle');expect(page.locator('html')).to_have_attribute('lang','fa');expect(page.locator('#workspace')).to_be_visible();check('Language and session survive reload')
+            # page.evaluate would measure the inspector exemption, not page CSP.
+            # This probe explicitly opts out of that exemption (Chromium only).
             if not args.dom_bridge:
-                blocked=page.evaluate("() => {try {window.eval('2+2'); return false;} catch(e){return e instanceof EvalError;}}")
-                assert blocked;check('Eval is genuinely blocked by the page CSP')
+                assert navigation is not None and navigation.ok,'Reloaded document navigation failed'
+                document_csp=require_csp_header(navigation.headers.get('content-security-policy'))
+                csp_evidence=probe_string_compilation(page)
+                csp_evidence['documentCsp']=document_csp
+                (out/'csp-probe.json').write_text(json.dumps(csp_evidence,indent=2)+'\n')
+                require_string_compilation_blocked(csp_evidence)
+                check('Eval and Function constructor are blocked with inspector exemption disabled')
             page.locator('#logout').click();expect(page.locator('#loginView')).to_be_visible();check('Logout returns to login')
             assert not errors,errors;check('No page JavaScript errors')
-        except Exception:
-            page.screenshot(path=str(out/'failure.png'),full_page=True);raise
+        except Exception as exc:
+            failure={'type':type(exc).__name__}
+            try:page.screenshot(path=str(out/'failure.png'),full_page=True)
+            except Exception:pass  # Preserve the original failure if the page closed.
+            raise
         finally:
-            ctx.tracing.stop(path=str(out/'trace.zip'));browser.close()
-            if server:server.shutdown()
-    report={'mode':'synthetic-fixture' if args.fixture else 'real-aspnet-replay','transport':'isolated-dom-http-bridge' if args.dom_bridge else 'explicit-http-route' if args.route_transport else 'native-browser-navigation','nativeCookieCspDownloadReloadChecksExecuted':not args.dom_bridge,'checks':checks,'passed':len(checks),'sqlServerUsed':False}
-    (out/'report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))
+            report={'mode':'synthetic-fixture' if args.fixture else 'real-aspnet-replay','transport':'isolated-dom-http-bridge' if args.dom_bridge else 'explicit-http-route' if args.route_transport else 'native-browser-navigation','status':'failed' if failure else 'passed','nativeCookieCspDownloadReloadChecksExecuted':not args.dom_bridge and failure is None,'cspProbe':csp_evidence,'failure':failure,'checks':checks,'passed':len(checks),'sqlServerUsed':False,'browserVersion':browser.version}
+            (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+            try:ctx.tracing.stop(path=str(out/'trace.zip'))
+            finally:
+                browser.close()
+                if server:server.shutdown();server.server_close()
+    print(json.dumps(report,indent=2))
 if __name__=='__main__':main()

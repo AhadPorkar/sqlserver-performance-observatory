@@ -2,6 +2,13 @@
 
 [Projekt](../../README.de.md) | [English](../en/testing.md)
 
+## CI-Nachtrag: 6. Oktober 2026
+Bereitgestellte GitHub-Protokolle bestätigen Build/Publish und jeweils 51 bestandene
+xUnit-Tests auf Windows/Linux sowie 20 echte ASP.NET-API-Prüfungen. Der native
+Browsertest scheiterte an einer falsch angesetzten CSP-Assertion. Diese wurde
+korrigiert, ohne CSP abzuschalten. [Diagnose und neue Prüfgrenzen](ci-csp-fix.md).
+Die folgenden Ergebnisse beschreiben weiterhin die ursprüngliche Lieferumgebung.
+
 ## Lieferstatus vom 5. Oktober 2026
 Version `0.1.0-preview.1` ist eine Quellcode-Vorschau. In der Lieferumgebung fehlten .NET-SDK, Docker und SQL Server; der SDK-Download scheiterte an Netzwerk/DNS. Deshalb werden **keine C#-Kompilierung, xUnit-Ausführung, ASP.NET-Laufzeitprüfung, echten SQL-Messungen, Windows- oder Container-Tests** behauptet.
 

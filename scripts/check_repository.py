@@ -40,6 +40,10 @@ def main():
     check('lab requires explicit acceptance','--accept-lab-only' in (ROOT/'tools/Observatory.Lab/Program.cs').read_text())
     check('bigint-safe serialization','Int64StringConverter' in (ROOT/'src/Observatory.Core/JsonDefaults.cs').read_text())
     parser=(ROOT/'src/Observatory.Core/DeadlockParser.cs').read_text();check('XML DTD disabled','DtdProcessing.Prohibit' in parser and 'XmlResolver = null' in parser)
+    probe=(ROOT/'tests/csp_probe.py').read_text()
+    check('CSP probe opts out of inspector exemption',"'allowUnsafeEvalBlockedByCSP': False" in probe)
+    check('CSP negative controls are present','test_missing_policy_is_not_reported_as_blocking' in (ROOT/'tests/csp_test.py').read_text() and 'test_unsafe_eval_is_not_reported_as_blocking' in (ROOT/'tests/csp_test.py').read_text())
+    check('CI keeps native ASP.NET browser run','python tests/ui_test.py --base-url http://localhost:5080' in (ROOT/'.github/workflows/verify.yml').read_text())
     # Check local Markdown references. External links deliberately aren't fetched here.
     count=0
     for path in ROOT.rglob('*.md'):

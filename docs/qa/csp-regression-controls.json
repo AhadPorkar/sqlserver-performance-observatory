@@ -1,0 +1,150 @@
+{
+  "kind": "synthetic-document-csp-regression-controls",
+  "browserVersion": "144.0.7559.96",
+  "testsRun": 12,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "passed": true,
+  "realAspNetHost": false,
+  "nativeHttpNavigation": false,
+  "sqlServerUsed": false,
+  "observations": [
+    {
+      "test": "test_default_src_fallback_blocks_both_apis",
+      "mechanism": "Chromium Runtime.evaluate with inspector CSP exemption disabled",
+      "allowUnsafeEvalBlockedByCSP": false,
+      "results": {
+        "eval": {
+          "status": "blocked",
+          "errorName": "EvalError"
+        },
+        "functionConstructor": {
+          "status": "blocked",
+          "errorName": "EvalError"
+        }
+      }
+    },
+    {
+      "test": "test_explicit_probe_agrees_with_native_click_handler",
+      "mechanism": "Chromium Runtime.evaluate with inspector CSP exemption disabled",
+      "allowUnsafeEvalBlockedByCSP": false,
+      "results": {
+        "eval": {
+          "status": "blocked",
+          "errorName": "EvalError"
+        },
+        "functionConstructor": {
+          "status": "blocked",
+          "errorName": "EvalError"
+        }
+      }
+    },
+    {
+      "test": "test_inspector_call_does_not_change_later_document_policy",
+      "mechanism": "Chromium Runtime.evaluate with inspector CSP exemption disabled",
+      "allowUnsafeEvalBlockedByCSP": false,
+      "results": {
+        "eval": {
+          "status": "blocked",
+          "errorName": "EvalError"
+        },
+        "functionConstructor": {
+          "status": "blocked",
+          "errorName": "EvalError"
+        }
+      },
+      "originalPageEvaluateReportedBlocked": false
+    },
+    {
+      "test": "test_missing_policy_is_not_reported_as_blocking",
+      "mechanism": "Chromium Runtime.evaluate with inspector CSP exemption disabled",
+      "allowUnsafeEvalBlockedByCSP": false,
+      "results": {
+        "eval": {
+          "status": "allowed",
+          "value": 4
+        },
+        "functionConstructor": {
+          "status": "allowed",
+          "value": 4
+        }
+      }
+    },
+    {
+      "test": "test_script_src_can_override_default_src",
+      "mechanism": "Chromium Runtime.evaluate with inspector CSP exemption disabled",
+      "allowUnsafeEvalBlockedByCSP": false,
+      "results": {
+        "eval": {
+          "status": "allowed",
+          "value": 4
+        },
+        "functionConstructor": {
+          "status": "allowed",
+          "value": 4
+        }
+      }
+    },
+    {
+      "test": "test_strict_script_src_blocks_both_apis",
+      "mechanism": "Chromium Runtime.evaluate with inspector CSP exemption disabled",
+      "allowUnsafeEvalBlockedByCSP": false,
+      "results": {
+        "eval": {
+          "status": "blocked",
+          "errorName": "EvalError"
+        },
+        "functionConstructor": {
+          "status": "blocked",
+          "errorName": "EvalError"
+        }
+      }
+    },
+    {
+      "test": "test_strict_script_src_overrides_permissive_default",
+      "mechanism": "Chromium Runtime.evaluate with inspector CSP exemption disabled",
+      "allowUnsafeEvalBlockedByCSP": false,
+      "results": {
+        "eval": {
+          "status": "blocked",
+          "errorName": "EvalError"
+        },
+        "functionConstructor": {
+          "status": "blocked",
+          "errorName": "EvalError"
+        }
+      }
+    },
+    {
+      "test": "test_unsafe_eval_is_not_reported_as_blocking",
+      "mechanism": "Chromium Runtime.evaluate with inspector CSP exemption disabled",
+      "allowUnsafeEvalBlockedByCSP": false,
+      "results": {
+        "eval": {
+          "status": "allowed",
+          "value": 4
+        },
+        "functionConstructor": {
+          "status": "allowed",
+          "value": 4
+        }
+      }
+    },
+    {
+      "test": "test_unsafe_inline_does_not_enable_eval",
+      "mechanism": "Chromium Runtime.evaluate with inspector CSP exemption disabled",
+      "allowUnsafeEvalBlockedByCSP": false,
+      "results": {
+        "eval": {
+          "status": "blocked",
+          "errorName": "EvalError"
+        },
+        "functionConstructor": {
+          "status": "blocked",
+          "errorName": "EvalError"
+        }
+      }
+    }
+  ]
+}

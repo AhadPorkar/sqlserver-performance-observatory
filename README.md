@@ -8,6 +8,11 @@ An independent, read-only diagnostic workspace built with **C# 14, ASP.NET Core 
 
 > **Engineering preview: `0.1.0-preview.1`.** The delivered source has not been compiled or run on .NET/SQL Server in its preparation environment. Frontend/support checks were exercised with explicitly synthetic fixtures. CI and a guarded live SQL acceptance lab are supplied; see the precise [verification boundary](docs/en/testing.md). No passing-build badge or measured speedup is asserted.
 
+> **CI follow-up (6 October 2026):** Uploaded logs confirm .NET builds and 51
+> passing xUnit tests on each of Windows/Linux, plus 20 real ASP.NET API checks.
+> The browser job exposed a test-side CSP/inspector mismatch, now corrected.
+> [Read the diagnosis and remaining verification boundary](docs/en/ci-csp-fix.md).
+
 ![English overview with a visible synthetic replay banner](docs/assets/overview-en.png)
 
 *Actual frontend, synthetic fixture data. These figures are neither production telemetry nor a performance benchmark.*

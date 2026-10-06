@@ -1,0 +1,49 @@
+{
+  "kind": "user-supplied-ci-log-summary-not-a-new-execution",
+  "repository": "AhadPorkar/sqlserver-performance-observatory",
+  "commit": "60dc9a465d326ccc8d0835187e305f80c8af2a83",
+  "logDateUtc": "2026-10-06",
+  "inputArchiveName": "logs_101358504729.zip",
+  "inputArchiveSha256": "9c37c4c3834653717ac456669d4a524acbfec9d5d7a9bb5168040e459c6e0d6b",
+  "jobs": {
+    "dotnet-ubuntu-24.04": {
+      "build": "passed",
+      "xunitPassed": 51,
+      "xunitFailed": 0,
+      "xunitSkipped": 0,
+      "publish": "passed"
+    },
+    "dotnet-windows-2022": {
+      "build": "passed",
+      "xunitPassed": 51,
+      "xunitFailed": 0,
+      "xunitSkipped": 0,
+      "publish": "passed"
+    },
+    "source": {
+      "sourceChecks": "passed",
+      "frontendTests": 14,
+      "pythonTests": 6
+    },
+    "browser": {
+      "aspnetPublishAndStart": "passed",
+      "apiSmokeChecksPassed": 20,
+      "nativeUi": "failed",
+      "failureFile": "tests/ui_test.py",
+      "failureLine": 88,
+      "failure": "AssertionError at assert blocked",
+      "expression": "page.evaluate(\"() => {try {window.eval('2+2'); return false;} catch(e){return e instanceof EvalError;}}\")"
+    }
+  },
+  "nonFatalWarnings": [
+    "xUnit2031",
+    "xUnit2008",
+    "Node.js 20 GitHub Actions deprecation / punycode"
+  ],
+  "scope": {
+    "replayOnly": true,
+    "sqlServerIntegrationRunPresent": false,
+    "newPatchExecution": false
+  },
+  "rawLogsIncludedInSource": false
+}

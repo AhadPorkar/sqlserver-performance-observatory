@@ -1,0 +1,10 @@
+<event name="xml_deadlock_report" timestamp="2026-10-05T09:48:00Z">
+<data name="xml_report"><value><deadlock>
+<victim-list><victimProcess id="processA" /></victim-list>
+<process-list>
+<process id="processA" spid="71" currentdb="7" loginname="DO_NOT_PERSIST_LOGIN" hostname="DO_NOT_PERSIST_HOST"><inputbuf>SELECT 'DO_NOT_PERSIST_SQL_SECRET';</inputbuf></process>
+<process id="processB" spid="72" currentdb="7"><inputbuf>UPDATE private_data SET secret='never-export';</inputbuf></process>
+</process-list><resource-list>
+<keylock objectname="DO_NOT_PERSIST_OBJECT"><owner-list><owner id="processA" mode="X" /></owner-list><waiter-list><waiter id="processB" mode="X" /></waiter-list></keylock>
+<keylock><owner-list><owner id="processB" mode="X" /></owner-list><waiter-list><waiter id="processA" mode="X" /></waiter-list></keylock>
+</resource-list></deadlock></value></data></event>

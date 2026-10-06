@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Read-only SQL Server evidence: Query Store regressions, blocking and deadlocks.">
+<title>SQL Performance Observatory</title><link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/styles.css"><script type="module" src="/app.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main" data-i18n="skip">Skip to content</a>
+<div id="loginView" class="login-layout">
+<section class="login-story">
+<div class="wordmark"><span class="brand-mark" aria-hidden="true">O</span><span>SQL PERFORMANCE<br><strong>OBSERVATORY</strong></span></div>
+<div class="eyebrow" data-i18n="loginEyebrow">DATABASE ENGINEERING / EVIDENCE FIRST</div>
+<h1 data-i18n="loginTitle">Understand the slowdown. Keep control of the fix.</h1>
+<p data-i18n="loginIntro">A read-only workspace for Query Store, blocking chains and deadlock evidence.</p>
+<div class="login-foot" data-i18n="preview">Engineering preview / 0.1</div>
+</section>
+<section class="login-panel">
+<label class="language-label"><span data-i18n="language">Language</span><select class="language-picker" aria-label="Language"><option value="en">English</option><option value="de">Deutsch</option><option value="fa">&#1601;&#1575;&#1585;&#1587;&#1740;</option></select></label>
+<form id="loginForm" class="login-card"><span class="eyebrow" data-i18n="privateWorkspace">PRIVATE WORKSPACE</span>
+<h2 data-i18n="signIn">Open the observatory</h2><p class="muted" data-i18n="keyHelp">Use your server access key. Database credentials never enter this browser.</p>
+<label for="accessKey" data-i18n="accessKey">Workspace access key</label><input id="accessKey" type="password" autocomplete="current-password" required maxlength="1024">
+<button class="button primary" type="submit" data-i18n="signInButton">Sign in securely</button><p id="loginError" class="error" role="alert"></p>
+<p class="small muted" data-i18n="noPublicData">Every API requires authentication, including the synthetic replay.</p></form>
+</section></div>
+<div id="workspace" class="app-layout" hidden>
+<aside class="sidebar"><a href="#overview" class="wordmark"><span class="brand-mark" aria-hidden="true">O</span><span>SQL PERFORMANCE<br><strong>OBSERVATORY</strong></span></a>
+<div class="sidebar-caption" data-i18n="workspace">WORKSPACE</div><nav aria-label="Main navigation" id="navigation">
+<button data-page="overview" class="nav-link active"><span aria-hidden="true">01</span><span data-i18n="overview">Overview</span></button>
+<button data-page="queries" class="nav-link"><span aria-hidden="true">02</span><span data-i18n="queries">Query evidence</span></button>
+<button data-page="blocking" class="nav-link"><span aria-hidden="true">03</span><span data-i18n="blocking">Blocking chains</span></button>
+<button data-page="deadlocks" class="nav-link"><span aria-hidden="true">04</span><span data-i18n="deadlocks">Deadlock ledger</span></button>
+<button data-page="method" class="nav-link"><span aria-hidden="true">05</span><span data-i18n="method">Method &amp; coverage</span></button></nav>
+<div class="sidebar-bottom"><span class="read-only-dot"></span><span data-i18n="readOnly">Read-only by design</span><p data-i18n="noActions">No KILL. No index changes. No plan forcing.</p></div></aside>
+<div class="main-shell"><header class="topbar"><div class="target-field"><label for="target" data-i18n="target">OBSERVED DATABASE</label><select id="target"></select></div>
+<div class="toolbar"><label class="language-label"><span class="sr-only" data-i18n="language">Language</span><select class="language-picker" aria-label="Language"><option value="en">English</option><option value="de">Deutsch</option><option value="fa">&#1601;&#1575;&#1585;&#1587;&#1740;</option></select></label><button id="refresh" class="button" data-i18n="refresh">Refresh</button><button id="logout" class="button quiet" data-i18n="logout">Sign out</button></div></header>
+<div id="modeBanner" class="mode-banner" role="status"></div>
+<main id="main" tabindex="-1"><div id="networkError" class="error-bar" role="alert" hidden></div>
+<div class="page-heading"><div><div class="eyebrow" data-i18n="evidenceWorkspace">PERFORMANCE / EVIDENCE WORKSPACE</div><h1 id="pageTitle"></h1><p id="pageDescription" class="muted"></p></div><button id="export" class="button" data-i18n="export">Export evidence</button></div>
+<div id="content" aria-live="polite"></div><footer><span data-i18n="footer">Signals for investigation. Decisions remain with your DBA.</span><span id="sampleTime"></span></footer></main></div></div>
+<dialog id="queryDialog" aria-labelledby="dialogTitle"><div class="dialog-header"><h2 id="dialogTitle"></h2><button id="closeDialog" class="button" data-i18n="close">Close</button></div><div id="dialogContent"></div></dialog>
+</body></html>

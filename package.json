@@ -1,0 +1,11 @@
+{
+  "name": "sqlserver-performance-observatory-ui-tests",
+  "version": "0.1.0-preview.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/frontend/*.test.mjs",
+    "check": "node --check src/Observatory.Web/wwwroot/app.js && node --check src/Observatory.Web/wwwroot/ui.mjs"
+  },
+  "engines": { "node": ">=22" }
+}

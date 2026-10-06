@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Observatory.Core/Observatory.Core.csproj" />
+    <Project Path="src/Observatory.SqlServer/Observatory.SqlServer.csproj" />
+    <Project Path="src/Observatory.Web/Observatory.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/"><Project Path="tests/Observatory.Tests/Observatory.Tests.csproj" /></Folder>
+  <Folder Name="/tools/"><Project Path="tools/Observatory.Lab/Observatory.Lab.csproj" /></Folder>
+</Solution>

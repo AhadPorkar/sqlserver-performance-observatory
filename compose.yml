@@ -1,0 +1,20 @@
+services:
+  observatory:
+    build: .
+    environment:
+      SPO_ACCESS_KEY: ${SPO_ACCESS_KEY:?Set a random 32+ character SPO_ACCESS_KEY}
+      ASPNETCORE_URLS: http://0.0.0.0:8080
+      Observatory__Mode: Replay
+      Observatory__PublicOrigin: http://localhost:5080
+      Observatory__StateDirectory: /app/state
+    ports:
+      - "127.0.0.1:5080:8080"
+    volumes:
+      - observatory-state:/app/state
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+volumes:
+  observatory-state:

@@ -1,0 +1,64 @@
+name: SQL Server acceptance lab
+on:
+  workflow_dispatch:
+    inputs:
+      accept_developer_eula:
+        description: I accept SQL Server Developer license terms for this isolated non-production lab
+        required: true
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  acceptance:
+    if: ${{ inputs.accept_developer_eula }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Prepare ephemeral lab secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          sa="Sp0!$(openssl rand -hex 22)"
+          reader="Rd0!$(openssl rand -hex 22)"
+          echo "::add-mask::$sa"
+          echo "::add-mask::$reader"
+          echo "SPO_LAB_SA_PASSWORD=$sa" >> "$GITHUB_ENV"
+          echo "SPO_LAB_READER_PASSWORD=$reader" >> "$GITHUB_ENV"
+          echo "SPO_ACCEPT_SQL_EULA=Y" >> "$GITHUB_ENV"
+          echo "SPO_LAB_CONNECTION=Server=127.0.0.1,14333;Database=ObservatoryLab;User ID=sa;Password=$sa;Encrypt=True;TrustServerCertificate=True" >> "$GITHUB_ENV"
+          echo "SPO_LAB_READER_CONNECTION=Server=127.0.0.1,14333;Database=ObservatoryLab;User ID=spo_lab_reader;Password=$reader;Encrypt=True;TrustServerCertificate=True" >> "$GITHUB_ENV"
+      - name: Start dedicated Developer instance
+        run: docker compose -f compose.lab.yml up -d --wait --wait-timeout 300
+      - run: dotnet build tools/Observatory.Lab/Observatory.Lab.csproj -c Release
+      - name: Create guarded lab and reader
+        run: dotnet run --project tools/Observatory.Lab -c Release --no-build -- setup --accept-lab-only
+      - name: Compare identical workloads in separate closed intervals
+        run: dotnet run --project tools/Observatory.Lab -c Release --no-build -- benchmark --accept-lab-only --align-intervals
+      - name: Observe a real blocked request
+        run: dotnet run --project tools/Observatory.Lab -c Release --no-build -- blocking --accept-lab-only
+      - name: Observe a real deadlock and XEL record
+        run: dotnet run --project tools/Observatory.Lab -c Release --no-build -- deadlock --accept-lab-only
+      - name: Prove reader permissions with actual SQL requests
+        run: dotnet run --project tools/Observatory.Lab -c Release --no-build -- verify-reader --accept-lab-only
+      - name: Capture environment identity and logs
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          docker compose -f compose.lab.yml logs --no-color > artifacts/sql-lab.log 2>&1 || true
+          docker image inspect mcr.microsoft.com/mssql/server:2022-latest --format '{{json .RepoDigests}}' > artifacts/sql-image-digest.json || true
+          dotnet --info > artifacts/dotnet-info.txt
+      - name: Tear down only the dedicated Compose lab
+        if: always()
+        run: docker compose -f compose.lab.yml down -v
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: measured-sql-acceptance
+          path: artifacts/
+          if-no-files-found: warn

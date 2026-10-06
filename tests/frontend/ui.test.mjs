@@ -1,0 +1,18 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {number,instant,safeLanguage,isStale,sumExecutions,compareIds} from '../../src/Observatory.Web/wwwroot/ui.mjs';
+const root=new URL('../../src/Observatory.Web/wwwroot/',import.meta.url);
+const catalogs=Object.fromEntries(['en','de','fa'].map(x=>[x,JSON.parse(fs.readFileSync(new URL('locales/'+x+'.json',root)))]));
+test('English is the fallback, not the browser language',()=>{for(const x of [null,'','xx','DE','en-US'])assert.equal(safeLanguage(x),'en');});
+for(const l of ['en','de','fa'])test('catalog '+l+' has complete nonempty translations',()=>{assert.deepEqual(Object.keys(catalogs[l]).sort(),Object.keys(catalogs.en).sort());assert.ok(Object.values(catalogs[l]).every(x=>typeof x==='string'&&x.trim()));assert.equal(safeLanguage(l),l);});
+test('bigint identities are never rounded',()=>{assert.equal(number('9007199254740993','en'),'9,007,199,254,740,993');assert.equal(compareIds('9007199254740993','9007199254740992'),1);});
+test('execution sums use bigint arithmetic',()=>assert.equal(sumExecutions([{recent:{executions:'9007199254740993'}},{recent:{executions:'7'}}]),'9007199254741000'));
+test('invalid and missing measurements are unknown rather than zero',()=>{for(const x of [null,undefined,'',Infinity,NaN])assert.equal(number(x),'\u2014');assert.equal(number(0),'0');});
+test('decimal formatting respects language',()=>{assert.equal(number(1234.56,'de',2),'1.234,56');assert.equal(number(12.56,'en',1),'12.6');});
+test('timestamps explicitly use UTC',()=>{assert.ok(instant('2026-10-05T10:00:00Z').endsWith(' UTC'));assert.equal(instant('garbage'),'\u2014');});
+test('source freshness distinguishes errors, missing samples and age',()=>{const now=Date.parse('2026-10-05T10:00:00Z');assert.ok(isStale(null,now,60));assert.ok(isStale({state:'ok',lastSuccessUtc:'invalid'},now,60));assert.ok(isStale({state:'error',lastSuccessUtc:'2026-10-05T10:00:00Z'},now,60));assert.ok(isStale({state:'ok',lastSuccessUtc:'2026-10-05T09:58:00Z'},now,60));assert.equal(isStale({state:'ok',lastSuccessUtc:'2026-10-05T09:59:30Z'},now,60),false);});
+test('all static markup translation keys exist',()=>{const html=fs.readFileSync(new URL('index.html',root),'utf8');for(const m of html.matchAll(/data-i18n="([^"]+)"/g))assert.ok(m[1] in catalogs.en,m[1]);});
+test('fixture uses decimal-string bigint fields',()=>{const x=JSON.parse(fs.readFileSync(new URL('../../fixtures/replay.json',import.meta.url)));assert.equal(x.mode,'Replay');for(const b of x.buckets)for(const key of ['queryId','contextId','planId','executions'])assert.equal(typeof b[key],'string');});
+test('UI never injects query data into HTML',()=>{const js=fs.readFileSync(new URL('app.js',root),'utf8');assert.doesNotMatch(js,/innerHTML|outerHTML|insertAdjacentHTML|\beval\s*\(/);assert.match(js,/textContent/);});
+test('access key is not persisted by the browser',()=>{const js=fs.readFileSync(new URL('app.js',root),'utf8');const writes=[...js.matchAll(/localStorage\.setItem\(([^;]+)/g)];assert.equal(writes.length,1);assert.match(writes[0][1],/spo-language/);});

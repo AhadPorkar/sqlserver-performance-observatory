@@ -1,0 +1,77 @@
+{
+  "project": "sqlserver-performance-observatory",
+  "version": "0.1.0-preview.1",
+  "preparedDate": "2026-10-05",
+  "environment": {
+    "node": "22.16.0",
+    "python": "3.13.5",
+    "chromium": "144.0.7559.96"
+  },
+  "executed": {
+    "nodeFrontendTests": 14,
+    "pythonSupportTests": 6,
+    "browserFixtureChecks": 31,
+    "syntaxChecks": {
+      "nodeModules": true,
+      "pythonAst": true,
+      "yamlXmlJson": true,
+      "bashSyntax": true,
+      "csharpCompilation": false
+    },
+    "sourceStructureChecks": 47
+  },
+  "scope": {
+    "csharpCompiled": false,
+    "xunitExecuted": false,
+    "aspNetRuntimeExecuted": false,
+    "realSqlServerExecuted": false,
+    "dockerExecuted": false,
+    "windowsPowerShellExecuted": false,
+    "nativeBrowserNavigationPassed": false,
+    "sqlBenchmarkResults": null
+  },
+  "limitations": [
+    "No .NET SDK, SQL Server, Docker or PowerShell available; network prevented SDK acquisition.",
+    "Native browser navigation blocked by environment; actual UI exercised only through explicit isolated DOM/HTTP synthetic-fixture bridge.",
+    "Fixture checks do not verify ASP.NET authentication, CSP, cookies, downloads or real reload.",
+    "No SQL performance improvement, production deployment, CI success or platform certification is claimed."
+  ],
+  "authoredNotExecuted": {
+    "xunitFacts": 32,
+    "xunitTheoryMethods": 5,
+    "xunitInlineRows": 19,
+    "xunitCases": 51
+  },
+  "checks": "See accompanying source-check and UI fixture reports; no .NET compilation is implied.",
+  "preparedUtc": "2026-10-05T14:16:40.203528+00:00",
+  "reports": {
+    "ui": "ui-fixture-report.json",
+    "source": "source-check.json",
+    "node": "node-tests.txt",
+    "python": "python-tests.txt"
+  },
+  "notMeasured": [
+    "SQL duration/CPU/read improvement",
+    "Collector overhead",
+    "Concurrency throughput",
+    "Security penetration test",
+    "Memory pressure/recovery on actual ASP.NET",
+    "Windows installer or PowerShell execution"
+  ],
+  "packageVerification": {
+    "manifestAlgorithm": "SHA-256",
+    "status": "archive-verification-follows-in-external-report"
+  },
+  "sourceInventory": {
+    "filesIncludingManifest": 141,
+    "csharpFiles": 23,
+    "markdownFiles": 42,
+    "localeKeysPerLanguage": 132,
+    "languageDefault": "en",
+    "locales": [
+      "en",
+      "de",
+      "fa"
+    ]
+  }
+}

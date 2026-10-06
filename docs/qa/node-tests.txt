@@ -1,0 +1,98 @@
+
+> sqlserver-performance-observatory-ui-tests@0.1.0-preview.1 test
+> node --test tests/frontend/*.test.mjs
+
+TAP version 13
+# Subtest: English is the fallback, not the browser language
+ok 1 - English is the fallback, not the browser language
+  ---
+  duration_ms: 0.773927
+  type: 'test'
+  ...
+# Subtest: catalog en has complete nonempty translations
+ok 2 - catalog en has complete nonempty translations
+  ---
+  duration_ms: 1.248591
+  type: 'test'
+  ...
+# Subtest: catalog de has complete nonempty translations
+ok 3 - catalog de has complete nonempty translations
+  ---
+  duration_ms: 0.170052
+  type: 'test'
+  ...
+# Subtest: catalog fa has complete nonempty translations
+ok 4 - catalog fa has complete nonempty translations
+  ---
+  duration_ms: 0.13499
+  type: 'test'
+  ...
+# Subtest: bigint identities are never rounded
+ok 5 - bigint identities are never rounded
+  ---
+  duration_ms: 13.853692
+  type: 'test'
+  ...
+# Subtest: execution sums use bigint arithmetic
+ok 6 - execution sums use bigint arithmetic
+  ---
+  duration_ms: 0.190512
+  type: 'test'
+  ...
+# Subtest: invalid and missing measurements are unknown rather than zero
+ok 7 - invalid and missing measurements are unknown rather than zero
+  ---
+  duration_ms: 0.428155
+  type: 'test'
+  ...
+# Subtest: decimal formatting respects language
+ok 8 - decimal formatting respects language
+  ---
+  duration_ms: 0.191935
+  type: 'test'
+  ...
+# Subtest: timestamps explicitly use UTC
+ok 9 - timestamps explicitly use UTC
+  ---
+  duration_ms: 3.572176
+  type: 'test'
+  ...
+# Subtest: source freshness distinguishes errors, missing samples and age
+ok 10 - source freshness distinguishes errors, missing samples and age
+  ---
+  duration_ms: 0.490087
+  type: 'test'
+  ...
+# Subtest: all static markup translation keys exist
+ok 11 - all static markup translation keys exist
+  ---
+  duration_ms: 0.718235
+  type: 'test'
+  ...
+# Subtest: fixture uses decimal-string bigint fields
+ok 12 - fixture uses decimal-string bigint fields
+  ---
+  duration_ms: 1.516269
+  type: 'test'
+  ...
+# Subtest: UI never injects query data into HTML
+ok 13 - UI never injects query data into HTML
+  ---
+  duration_ms: 0.419292
+  type: 'test'
+  ...
+# Subtest: access key is not persisted by the browser
+ok 14 - access key is not persisted by the browser
+  ---
+  duration_ms: 0.164334
+  type: 'test'
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 96.369692

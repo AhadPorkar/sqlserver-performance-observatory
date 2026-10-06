@@ -1,0 +1,27 @@
+name: Bug report / Fehlerbericht
+description: A reproducible issue, without SQL text or secrets.
+body:
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and observed behavior / Erwartetes und beobachtetes Verhalten
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps / Reproduktionsschritte
+      description: Use synthetic data. Never attach production XEL, query text, connection strings, cookies or access keys.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Versions and source status codes / Versionen und Statuscodes
+  - type: checkboxes
+    id: safe
+    attributes:
+      label: Privacy / Datenschutz
+      options:
+        - label: I removed secrets and sensitive diagnostic content / Geheimnisse und sensible Diagnosedaten wurden entfernt
+          required: true

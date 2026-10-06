@@ -40,7 +40,7 @@ jobs:
       - run: dotnet build Observatory.slnx -c Release --no-restore
       - run: dotnet test tests/Observatory.Tests/Observatory.Tests.csproj -c Release --no-build --logger trx --results-directory artifacts/tests
       - run: dotnet publish src/Observatory.Web/Observatory.Web.csproj -c Release --no-build -o artifacts/publish
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: dotnet-${{ matrix.os }}
@@ -83,7 +83,7 @@ jobs:
       - name: Stop server
         if: always()
         run: if [ -f artifacts/server.pid ]; then kill "$(cat artifacts/server.pid)" || true; fi
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: aspnet-browser-evidence

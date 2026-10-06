@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <ProjectReference Include="../Observatory.Core/Observatory.Core.csproj" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.7" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="7.1.1" />
     <EmbeddedResource Include="Queries/*.sql" />
   </ItemGroup>
 </Project>

@@ -3,7 +3,7 @@ WORKDIR /src
 COPY . .
 RUN dotnet restore Observatory.slnx
 RUN dotnet publish src/Observatory.Web/Observatory.Web.csproj -c Release --no-restore -o /out /p:UseAppHost=false
-FROM mcr.microsoft.com/dotnet/aspnet:10.0.12 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:10.0.14 AS runtime
 WORKDIR /app
 COPY --from=build /out ./
 RUN mkdir -p /app/state && chown -R 1654:1654 /app
